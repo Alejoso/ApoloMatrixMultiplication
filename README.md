@@ -30,9 +30,26 @@
     ```
 
 6. Run the program:
-    ```
-    sbatch job.sh
-    ```
+    - In APOLO:
+        ```
+        sbatch job.sh
+        ```
+
+    - In you pc:
+        ```
+        ./bin/mmm
+        ```
+
+
+**NOTE:** If you have the following message or something similar
+```
+[1]    2460040 segmentation fault (core dumped)  ./bin/mmm
+```
+It is because the program uses very long arrays, and it is probably a stack overflow problem that you can solve by executing:
+```
+ulimit -s unlimited
+```
+Run the program again and it should work. If any of these solutions help you, you can always contact us!
 
 **NOTE:** by default, the program will create random arrays from `2x2` to `5000x5000`, and perform `50` tests. If you are going to run the program on your pc or perform tests in APOLO, we recommend that you change these parameters, for example:
 ```
