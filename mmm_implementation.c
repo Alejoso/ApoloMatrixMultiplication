@@ -3,17 +3,22 @@
 #include <time.h>
 
 #define N 50
+
+#define N 10
 #define MIN_SIZE 2
-#define MAX_SIZE 5000
-#define MAX_NUM 10000000.0
+#define MAX_SIZE 1000
+
+// #define MIN_SIZE 2
+// #define MAX_SIZE 5000
+// #define MAX_NUM 10000000.0
 
 int main(){
-    srand((unsigned) time(NULL));
-    int size = MIN_SIZE + (rand() % MAX_SIZE), iterator = 0;
-    double time_spent = 0.0;
-    double A[size][size] __attribute__((aligned(64))), B[size][size] __attribute__((aligned(64))), C[size][size] __attribute__((aligned(64)));
+    srand((unsigned) time(NULL)); //Seed
+    int size = MIN_SIZE + (rand() % MAX_SIZE), iterator = 0; //Define size between 5000 and 10000000 + 5000
+    double time_spent = 0.0; // Time variable
+    double A[size][size] __attribute__((aligned(64))), B[size][size] __attribute__((aligned(64))), C[size][size] __attribute__((aligned(64))); //Seems like we are defining squeared matrixes with the size we created earlier
 
-    while(iterator++ < N){
+    while(iterator++ < N){ //50 tests
         printf("Running iteration number: %d\n", iterator);
 
         clock_t begin_time = clock();
@@ -39,11 +44,11 @@ int main(){
         // Stop modifying here
         
         clock_t end_time = clock();
-        time_spent += (double)(end_time - begin_time) / CLOCKS_PER_SEC;
+        time_spent += (double)(end_time - begin_time) / CLOCKS_PER_SEC; 
     }
 
     printf("Size of matrices: %d \n", size);
-    printf("Running time: %f \n", (time_spent / N));
+    printf("Running time: %f \n", (time_spent / N)); 
 
     return 0;
 }
