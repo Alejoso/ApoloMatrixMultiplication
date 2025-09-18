@@ -1,5 +1,41 @@
 # Final Workshop Alejandro
 
+## OpenMP directives
+
+```C
+#pragma omp parallel default(none) shared (size,A,B,C) private (i,j) // Ideal way of initializing variables with NUMA nodes
+        {
+
+            #pragma omp for schedule(static)
+
+            for(i = 0; i < size; i++){
+                for(j = 0; j < size; j++){
+                    A[j][i] = 1 + ((double)rand() / RAND_MAX) * MAX_NUM;
+                    B[j][i] = 1 + ((double)rand() / RAND_MAX) * MAX_NUM; 
+                    C[j][i] = 0;
+                }
+            }
+
+        }
+```
+According to some documentation, `Mastering OpenMP Performance`, using this structure is a more NUMA friendly data initialization.
+
+```C
+#pragma omp parallel for collapse (3)
+        //#pragma omp simd
+
+            for(j = 0; j < size; j++){
+                for(int k = 0; k < size; k++){
+                    for(i = 0; i < size; i++){
+                        C[i][j] += A[i][k] * B[k][j];
+                    }
+                }
+            }
+
+```
+
+Using these directives, we convert those three for loops into one, making us have a higher number of data points but only one loop. Also, this enables SIMD operations, so we can vectorize the operations done on the matrices.
+
 ## Flags used for the compilation 
 
 - `-fopenmp` -> This flag enables the compilation of the code that uses OpenMP directives.
