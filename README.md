@@ -27,3 +27,14 @@ Terminal usage, C language, and compilation of the program were not a problem at
 - [Options That Control Optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
 
 ## Results on Apolo
+| JobID   | JobName     | Partition | State      | Elapsed | TotalCPU | MaxRSS   |
+|---------|-------------|-----------|------------|---------|----------|----------|
+| 100458  | MMM-SCAR-+  | learning  | COMPLETED  | 00:03:23| 01:43:06 |          |
+| 100458.batch | batch  |           | COMPLETED  | 00:03:23| 01:43:06 | 134768K  |
+
+***From the .out file***
+
+Size of matrices: 2349
+
+Running time: 123.730780
+
