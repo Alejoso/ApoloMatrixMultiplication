@@ -3,14 +3,9 @@
 #include <time.h>
 #include <omp.h> 
 
-
-#define N 10
+#define N 50
 #define MIN_SIZE 2
-#define MAX_SIZE 2000
-
-// #define N 50
-// #define MIN_SIZE 2
-// #define MAX_SIZE 5000
+#define MAX_SIZE 5000
 
 #define MAX_NUM 10000000.0
 
@@ -18,8 +13,7 @@ int main(){
 
 
     srand((unsigned) time(NULL)); //Seed
-    //int size = MIN_SIZE + (rand() % MAX_SIZE), iterator = 0; //Define size between 5000 and 10000000 + 5000
-    int size = 1757 , iterator = 0; 
+    int size = MIN_SIZE + (rand() % MAX_SIZE), iterator = 0; //Define size between 5000 and 10000000 + 5000
     double time_spent = 0.0; // Time variable
     double A[size][size] __attribute__((aligned(64))), B[size][size] __attribute__((aligned(64))), C[size][size] __attribute__((aligned(64))); //Seems like we are defining squeared matrixes with the size we created earlier
 
@@ -30,22 +24,32 @@ int main(){
         
         // Start modifying here
 
-        #pragma omp parallel for collapse (2)  //We are collapsing those 2 for loops :) 
+        // #pragma omp parallel for collapse (2)  //We are collapsing those 2 for loops :) 
 
-            for(int i = 0; i < size; i++){
-                for(int j = 0; j < size; j++){
+        int i;
+        int j;
+
+        #pragma omp parallel default(none) shared (size,A,B,C) private (i,j) // Ideal way of initializing variables with NUMA nodes
+        {
+
+            #pragma omp for schedule(static)
+
+            for(i = 0; i < size; i++){
+                for(j = 0; j < size; j++){
                     A[j][i] = 1 + ((double)rand() / RAND_MAX) * MAX_NUM;
                     B[j][i] = 1 + ((double)rand() / RAND_MAX) * MAX_NUM; 
                     C[j][i] = 0;
                 }
             }
-        
+
+        }  
+
         #pragma omp parallel for collapse (3)
         //#pragma omp simd
 
-            for(int j = 0; j < size; j++){
+            for(j = 0; j < size; j++){
                 for(int k = 0; k < size; k++){
-                    for(int i = 0; i < size; i++){
+                    for(i = 0; i < size; i++){
                         C[i][j] += A[i][k] * B[k][j];
                     }
                 }
